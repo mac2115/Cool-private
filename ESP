@@ -1,1 +1,168 @@
+-- womp womp gui 2 lua womp womp
 
+-- Instances:
+
+local ScreenGui = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local ScrollingFrame = Instance.new("ScrollingFrame")
+local Messages = Instance.new("TextLabel")
+local TextLabel = Instance.new("TextLabel")
+local X = Instance.new("TextButton")
+local Minimize = Instance.new("TextButton")
+
+--Properties:
+
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+MainFrame.Name = "MainFrame"
+MainFrame.Parent = ScreenGui
+MainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+MainFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+MainFrame.BorderSizePixel = 0
+MainFrame.Position = UDim2.new(1, -450, 1, -250)
+MainFrame.Size = UDim2.new(0, 450, 0, 25)
+
+ScrollingFrame.Parent = MainFrame
+ScrollingFrame.Active = true
+ScrollingFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+ScrollingFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+ScrollingFrame.BorderSizePixel = 0
+ScrollingFrame.Position = UDim2.new(0, 0, 0, 25)
+ScrollingFrame.Size = UDim2.new(0, 450, 0, 250)
+ScrollingFrame.CanvasSize = UDim2.new(0, 0, 0, 500)
+ScrollingFrame.BackgroundTransparency = 0.5
+Messages.Name = "Messages"
+Messages.Parent = ScrollingFrame
+Messages.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Messages.BackgroundTransparency = 1.000
+Messages.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Messages.BorderSizePixel = 0
+Messages.Size = UDim2.new(1, 0, 0, 15)
+Messages.Font = Enum.Font.SourceSans
+Messages.Text = ""
+Messages.TextColor3 = Color3.fromRGB(230, 230, 230)
+Messages.TextSize = 15.000
+Messages.TextWrapped = true
+Messages.TextXAlignment = Enum.TextXAlignment.Left
+Messages.TextYAlignment = Enum.TextYAlignment.Top
+
+TextLabel.Parent = MainFrame
+TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel.BorderSizePixel = 0
+TextLabel.Size = UDim2.new(0, 0, 1, 0)
+TextLabel.Font = Enum.Font.Nunito
+TextLabel.Text = " Message Logger"
+TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.TextSize = 20.000
+TextLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+X.Name = "X"
+X.Parent = MainFrame
+X.BackgroundColor3 = Color3.fromRGB(255, 42, 35)
+X.BorderColor3 = Color3.fromRGB(0, 0, 0)
+X.BorderSizePixel = 0
+X.Position = UDim2.new(1, -25, 0, 0)
+X.Size = UDim2.new(0, 25, 0, 25)
+X.Font = Enum.Font.Jura
+X.Text = "X"
+X.TextColor3 = Color3.fromRGB(0, 0, 0)
+X.TextSize = 20.000
+
+Minimize.Name = "Minimize"
+Minimize.Parent = MainFrame
+Minimize.BackgroundColor3 = Color3.fromRGB(255, 229, 34)
+Minimize.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Minimize.BorderSizePixel = 0
+Minimize.Position = UDim2.new(1, -50, 0, 0)
+Minimize.Size = UDim2.new(0, 25, 0, 25)
+Minimize.Font = Enum.Font.Jura
+Minimize.Text = "-"
+Minimize.TextColor3 = Color3.fromRGB(0, 0, 0)
+Minimize.TextSize = 25.000
+
+-- Scripts:
+
+local function QLRT_fake_script() -- Messages.LocalScript 
+	local script = Instance.new('Folder', Messages)
+
+	for i,v in pairs(game.Players:GetChildren()) do
+		v.Chatted:Connect(function(msg)
+            if not script.Parent then return end
+			script.Parent.Text = script.Parent.Text .. v.Name .. ": ".. msg .. "\n"
+			script.Parent.Size = UDim2.new(1,0,0,15*math.ceil(script.Parent.TextBounds.Y))
+			script.Parent.Parent.CanvasSize = UDim2.new(0,0,0,script.Parent.Size.X.Offset)
+		end)
+	end
+	
+	game.Players.PlayerAdded:Connect(function(v)
+		v.Chatted:Connect(function(msg)
+            if not script.Parent then return end
+			script.Parent.Text = script.Parent.Text .. v.Name .. ": ".. msg .. "\n"
+			script.Parent.Size = UDim2.new(1,0,0,15*math.ceil(script.Parent.TextBounds.Y))
+			script.Parent.Parent.CanvasSize = UDim2.new(0,0,0,script.Parent.Size.X.Offset)
+		end)
+	end)
+	
+	
+end
+coroutine.wrap(QLRT_fake_script)()
+local function CNUTGU_fake_script() -- MainFrame.LocalScript 
+	local script = Instance.new('Folder', MainFrame)
+
+	local UIS = game:GetService("UserInputService")
+	function dragify(Frame)
+		dragToggle = nil
+		local dragSpeed = 0
+		dragInput = nil
+		dragStart = nil
+		local dragPos = nil
+		function updateInput(input)
+			local Delta = input.Position - dragStart
+			local Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + Delta.X, startPos.Y.Scale, startPos.Y.Offset + Delta.Y)
+			game:GetService("TweenService"):Create(Frame, TweenInfo.new(0.25), {Position = Position}):Play()
+		end
+		Frame.InputBegan:Connect(function(input)
+			if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and UIS:GetFocusedTextBox() == nil then
+				dragToggle = true
+				dragStart = input.Position
+				startPos = Frame.Position
+				input.Changed:Connect(function()
+					if input.UserInputState == Enum.UserInputState.End then
+						dragToggle = false
+					end
+				end)
+			end
+		end)
+		Frame.InputChanged:Connect(function(input)
+			if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+				dragInput = input
+			end
+		end)
+		game:GetService("UserInputService").InputChanged:Connect(function(input)
+			if input == dragInput and dragToggle then
+				updateInput(input)
+			end
+		end)
+	end
+	
+	dragify(script.Parent)
+end
+coroutine.wrap(CNUTGU_fake_script)()
+local function UZVIC_fake_script() -- X.LocalScript 
+	local script = Instance.new('Folder', X)
+
+	script.Parent.MouseButton1Click:Connect(function()
+		script.Parent.Parent.Parent:Destroy()
+	end)
+end
+coroutine.wrap(UZVIC_fake_script)()
+local function BVPHJRF_fake_script() -- Minimize.LocalScript 
+	local script = Instance.new('Folder', Minimize)
+
+	script.Parent.MouseButton1Click:Connect(function()
+		script.Parent.Parent.ScrollingFrame.Visible = not script.Parent.Parent.ScrollingFrame.Visible
+	end)
+end
+coroutine.wrap(BVPHJRF_fake_script)()
