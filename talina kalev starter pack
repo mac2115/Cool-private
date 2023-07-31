@@ -1,8 +1,9 @@
 
 
-
 queue_on_teleport('loadstring(game:HttpGet("https://raw.githubusercontent.com/mac2115/Cool-private/main/talina%20kalev%20starter%20pack"))()')
 
+
+if game:IsLoaded() then
     --//Variables
     local Settings= {
         Farms ={
@@ -1134,3 +1135,4 @@ end
         end)
         return ESP
 
+    end
